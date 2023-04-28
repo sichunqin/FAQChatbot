@@ -53,7 +53,7 @@ class FaqEngine:
 
         self.classifier = SVC(kernel='linear')
         self.classifier.fit(trainx, trainy)
-        # print("SVC:", self.model.score(testx, testy))        
+        # print("SVC:", self.model.score(testx, testy))
 
     def query(self, usr):
         # print("User typed : " + usr)
@@ -90,7 +90,13 @@ class FaqEngine:
 
 if __name__ == "__main__":
     base_path = os.path.join(os.path.dirname(os.path.abspath( __file__ )),"data")
-    faqslist = [os.path.join(base_path,"Greetings.csv"), os.path.join(base_path,"GST FAQs 2.csv")]
+    faqslist = [os.path.join(base_path,"Greetings.csv"), os.path.join(base_path,"vmx.csv")]
     faqmodel = FaqEngine(faqslist, 'tfidf')
     response = faqmodel.query("Hi")
     print(response)
+
+    while True:
+       question = input("Enter Question:")
+       response = faqmodel.query(question)
+       print(response)
+

@@ -23,8 +23,9 @@ class TfidfVectorGenerator:
         else:
             self.vectorizer = TfidfVectorizer(min_df=1, stop_words='english')
             self.vectorizer.fit(clean_questions)
-            with open(self.model_file_path, 'wb') as output_file:
-                pickle.dump(self.vectorizer, output_file)
+            # Not save the file,
+            #with open(self.model_file_path, 'wb') as output_file:
+            #    pickle.dump(self.vectorizer, output_file)
 
         transformed_X = []
         # Getting memory error
@@ -33,7 +34,7 @@ class TfidfVectorGenerator:
             transformed_X_csr = self.vectorizer.transform(clean_questions)
             transformed_X = transformed_X_csr.A # csr_matrix to numpy matrix
         return transformed_X
-        
+
     def query(self, clean_usr_msg):
         t_usr_array= None
         try:
@@ -42,5 +43,5 @@ class TfidfVectorGenerator:
         except Exception as e:
             print(e)
             return "Could not follow your question [" + t_usr_array + "], Try again"
-            
+
         return t_usr_array
