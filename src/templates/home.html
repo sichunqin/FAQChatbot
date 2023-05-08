@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
 {% block header %}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="css/chat_interface.css") }}">
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="css/temporary.css") }}">
+<link rel="stylesheet" type="text/css" href="static/css/chat_interface.css">
+<link rel="stylesheet" type="text/css" href="static/css/temporary.css">
 <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:300|Open+Sans:300|Oxygen|Material+Icons" rel="stylesheet">
 {% endblock %}
 
@@ -36,5 +36,5 @@
 {% endblock %}
 
 {% block other_footers %}
-<script src="{{ url_for('static', filename="js/bind.js") }}"></script>
+<script src="static/js/bind.js"></script>
 {% endblock %}

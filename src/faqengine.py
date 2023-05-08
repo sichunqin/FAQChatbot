@@ -2,6 +2,7 @@ import os
 
 import nltk
 import pandas as pd
+import csv
 from nltk.stem.lancaster import LancasterStemmer
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.model_selection import train_test_split as tts
@@ -27,7 +28,8 @@ class FaqEngine:
     def build_model(self, type):
 
         self.vectorizer = get_vectoriser(type)  # TfidfVectorizer(min_df=1, stop_words='english')
-        dataframeslist = [pd.read_csv(csvfile).dropna() for csvfile in self.faqslist]
+        dataframeslist = [pd.read_csv(csvfile,delimiter='|',quotechar='\'').dropna() for csvfile in self.faqslist]
+        #dataframeslist = [pd.read_csv(csvfile).dropna() for csvfile in self.faqslist]
         self.data = pd.concat(dataframeslist, ignore_index=True)
         self.questions = self.data['Question'].values
 
@@ -49,7 +51,7 @@ class FaqEngine:
 
         y = self.le.fit_transform(y)
 
-        trainx, testx, trainy, testy = tts(X, y, test_size=.25, random_state=42)
+        trainx, testx, trainy, testy = tts(X, y, test_size=.0000000001, random_state=42)
 
         self.classifier = SVC(kernel='linear')
         self.classifier.fit(trainx, trainy)
@@ -68,6 +70,7 @@ class FaqEngine:
             else:
                 questionset = self.data
 
+            questionset = self.data
             # threshold = 0.7
             cos_sims = []
             for question in questionset['Question']:
@@ -90,13 +93,14 @@ class FaqEngine:
 
 if __name__ == "__main__":
     base_path = os.path.join(os.path.dirname(os.path.abspath( __file__ )),"data")
-    faqslist = [os.path.join(base_path,"Greetings.csv"), os.path.join(base_path,"vmx.csv")]
+    faqslist = [os.path.join(base_path,"greetings.csv"), os.path.join(base_path,"vcas.csv")]
+
     faqmodel = FaqEngine(faqslist, 'tfidf')
     response = faqmodel.query("Hi")
     print(response)
 
     while True:
-       question = input("Enter Question:")
+       question = input("Enter Question: ")
        response = faqmodel.query(question)
        print(response)
 
