@@ -14,8 +14,9 @@ app.secret_key = '12345'
 
 faqs_list = [path.join(FAQs_DATA_FOLDER, "greetings.csv"), path.join(FAQs_DATA_FOLDER, "vcas.csv"),path.join(FAQs_DATA_FOLDER, "drm.csv")]
 faqs_list = [path.join(FAQs_DATA_FOLDER, "greetings.csv")]
-for file in data.config.urls:
-    file_path = os.path.join(FAQs_DATA_FOLDER, file["file_name"])
+for url in data.config.urls:
+    file_name = data.config.getCSVFileName(url)
+    file_path = os.path.join(FAQs_DATA_FOLDER, file_name)
     faqs_list.append(file_path)
 
 # ToDo: need to debug for 'gensim', 'bert' whereas 'spacy' (only pretrained), 'tfidf' seem ok.
