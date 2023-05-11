@@ -72,6 +72,7 @@ body {
 }
 .messages .message.left .avatar {
   background-color: #f5886e;
+  background-image: url('../img/icon-robot4.png');
   float: left;
 }
 .messages .message.left .text_wrapper {
@@ -87,6 +88,7 @@ body {
 }
 .messages .message.right .avatar {
   background-color: #fdbf68;
+  background-image: url('../img/icon-user2.png');
   float: right;
 }
 .messages .message.right .text_wrapper {
