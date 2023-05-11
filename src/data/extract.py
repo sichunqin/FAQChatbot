@@ -18,8 +18,8 @@ def extract(url, headers, output_file_path, question_tag):
         cleanQuesions.append(question.text)
         # print(question.text)
 
-    answers = soup.find_all('div', {'class': lambda x: x and 'panelContent' == x})
-
+    #answers = soup.find_all('div', {'class': lambda x: x and 'panelContent' == x})
+    answers = soup.select("[class=panelContent]")
     for answer in answers:
         if answer.find('a') != None:
             url = answer.find('a')["href"]
@@ -43,9 +43,9 @@ def extractAll():
         question_tag = config.getQuestionTag(url)
         extract(url,config.headers,file_path,question_tag)
 def extractOne():
-    url = config.urls[1]
+    url = config.urls[4]
     file_name = config.getCSVFileName(url)
-    file_path = os.path.join("src/data", file_name)
+    file_path = os.path.join("data", file_name)
     question_tag = config.getQuestionTag(url)
 
     extract(url,config.headers,file_path,question_tag)
