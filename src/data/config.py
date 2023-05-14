@@ -1,12 +1,8 @@
-import data.secret as secret
 
 import os
 from urllib.parse import urlparse
 
-headers = {
-    'Authorization': 'Bearer ' + secret.token,
-    'Content-Type': 'application/json'
-}
+
 def getCSVFileName(url):
     p = os.path.basename(urlparse(url).path)
     return p.replace("+", "") + ".csv"
@@ -16,6 +12,8 @@ def getQuestionTag(url):
     return p.replace("+", "")
 
 urls = [
+    "https://confluence.amlogic.com/display/SW/Chatbot+FAQ",
+    "https://confluence.amlogic.com/display/SW/Security+FAQ",
     "https://confluence.amlogic.com/display/SW/DRM+FAQ",
     "https://confluence.amlogic.com/display/SW/VMX+CAS+FAQ",
     "https://confluence.amlogic.com/display/SW//Secure+Provision+FAQ",

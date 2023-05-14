@@ -1,4 +1,5 @@
-import data.config as config
+import config
+import secret
 import requests
 from bs4 import BeautifulSoup
 import os
@@ -6,8 +7,14 @@ import pandas as pd
 from urllib.parse import urlsplit
 from urllib.parse import urljoin
 
+BASE_DIR = os.path.dirname(__file__)
+HEADERS = {
+    'Authorization': 'Bearer ' + secret.token,
+    'Content-Type': 'application/json'
+}
+
 def extract(url, headers, output_file_path, question_tag):
-    response = requests.get(url, headers=headers)
+    response = requests.get(url, headers=headers, verify=False)
 
     soup = BeautifulSoup(response.text, 'html.parser')
 
@@ -39,16 +46,16 @@ def extract(url, headers, output_file_path, question_tag):
 def extractAll():
     for url in config.urls:
         file_name = config.getCSVFileName(url)
-        file_path = os.path.join("data", file_name)
+        file_path = os.path.join(BASE_DIR, file_name)
         question_tag = config.getQuestionTag(url)
-        extract(url,config.headers,file_path,question_tag)
+        extract(url,HEADERS,file_path,question_tag)
 def extractOne():
     url = config.urls[4]
     file_name = config.getCSVFileName(url)
-    file_path = os.path.join("data", file_name)
+    file_path = os.path.join(BASE_DIR, file_name)
     question_tag = config.getQuestionTag(url)
 
-    extract(url,config.headers,file_path,question_tag)
+    extract(url,HEADERS,file_path,question_tag)
     pass
 if __name__ == "__main__":
     extractAll()
