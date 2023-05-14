@@ -4,5 +4,6 @@ __pycache__/
 .idea/
 models/
 *.csv
+!data/greetings.csv
 log
 data/secret.py
