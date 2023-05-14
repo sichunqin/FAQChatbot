@@ -14,6 +14,7 @@ def getQuestionTag(url):
 urls = [
     "https://confluence.amlogic.com/display/SW/Chatbot+FAQ",
     "https://confluence.amlogic.com/display/SW/Security+FAQ",
+    "https://confluence.amlogic.com/display/SW/TEE+FAQ",
     "https://confluence.amlogic.com/display/SW/DRM+FAQ",
     "https://confluence.amlogic.com/display/SW/VMX+CAS+FAQ",
     "https://confluence.amlogic.com/display/SW//Secure+Provision+FAQ",
