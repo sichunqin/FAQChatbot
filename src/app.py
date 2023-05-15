@@ -2,22 +2,24 @@ from flask import Flask
 from flask import render_template, jsonify, request
 from faqengine import *
 import random
+import os
 from os import path
-import data.config
 
 BASE_DIR = path.dirname(__file__)
 
 FAQs_DATA_FOLDER = path.join(BASE_DIR, "data")
+DATABASE_FOLDER = path.join(BASE_DIR, "database")
 
 app = Flask(__name__)
 app.secret_key = '12345'
 
-faqs_list = [path.join(FAQs_DATA_FOLDER, "greetings.csv"), path.join(FAQs_DATA_FOLDER, "vcas.csv"),path.join(FAQs_DATA_FOLDER, "drm.csv")]
 faqs_list = [path.join(FAQs_DATA_FOLDER, "greetings.csv")]
-for url in data.config.urls:
-    file_name = data.config.getCSVFileName(url)
-    file_path = os.path.join(FAQs_DATA_FOLDER, file_name)
-    faqs_list.append(file_path)
+
+for root, directories, filenames in os.walk(DATABASE_FOLDER):
+    for filename in filenames:
+        file_path = os.path.join(root, filename)
+        if file_path.endswith('.csv'):
+            faqs_list.append(file_path)
 
 # ToDo: need to debug for 'gensim', 'bert' whereas 'spacy' (only pretrained), 'tfidf' seem ok.
 faqs_engine = FaqEngine(faqs_list, "tfidf")
