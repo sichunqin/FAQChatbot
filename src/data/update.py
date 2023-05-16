@@ -61,7 +61,7 @@ def extract(url, headers, output_file_path, question_tag):
             for url in urls:
                 if urlsplit(url["src"]).netloc == "":  # relative path
                     url["src"] = urljoin(BASE_URL,  url["src"])
-                    pass
+
         cleanAnswers.append(answer.encode_contents().strip().decode('utf-8'))
         #cleanAnswers.append(answer.text.strip())
     sz = min(len(cleanQuesions), len(cleanAnswers))

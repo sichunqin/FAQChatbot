@@ -16,8 +16,8 @@ HEADERS = {
     'Content-Type': 'application/json'
 }
 
-def extract(url, headers, output_file_path, question_tag):
-    response = requests.get(url, headers=headers, verify=False)
+def extract(urlPath, headers, output_file_path, question_tag):
+    response = requests.get(urlPath, headers=headers)
 
     soup = BeautifulSoup(response.text, 'html.parser')
 
@@ -46,13 +46,17 @@ def extract(url, headers, output_file_path, question_tag):
                     pass
         cleanAnswers.append(answer.encode_contents().strip().decode('utf-8'))
         #cleanAnswers.append(answer.text.strip())
+    if len(cleanQuesions) !=len(cleanAnswers):
+        print("Warning: question count doesn't match answer count for the page " + urlPath)
+        print("Question count: " + str(len(cleanQuesions)) + "Answer count: " + str(len(cleanAnswers)))
     sz = min(len(cleanQuesions), len(cleanAnswers))
 
-    df = pd.DataFrame({'Question': cleanQuesions[:sz], 'Answer': cleanAnswers[:sz],'Class': question_tag })
-    print(df)
+    df = pd.DataFrame({'Question': cleanQuesions[:sz], ' Answer': cleanAnswers[:sz],'Class': question_tag })
+    #print(df)
     # output_file_path = os.path.join("src/data", output_file_name)
 
     df.to_csv(output_file_path, sep='|',quotechar='\'',index=False)
+    print("Crawl data from the page: " + urlPath)
 
 def extractAll():
     for url in config.urls:
@@ -69,8 +73,8 @@ def extractOne():
     extract(url,HEADERS,file_path,question_tag)
     pass
 if __name__ == "__main__":
-    #extractAll()
-    extractOne()
+    extractAll()
+    #extractOne()
     pass
 
 
