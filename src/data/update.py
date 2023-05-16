@@ -19,7 +19,7 @@ def get_pages():
     tag = 'security-chatbot'
 
     # Search for pages with the tag
-    url = f'{BASE_URL}/rest/api/content/search?cql=label="{tag}"'
+    url = f'{base_url}/rest/api/content/search?cql=label="{tag}"&limit=100'
 
     response = requests.get(url, headers=HEADERS)
     data = response.json()
