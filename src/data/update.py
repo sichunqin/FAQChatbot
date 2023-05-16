@@ -46,16 +46,15 @@ def extract(url, headers, output_file_path, question_tag):
         cleanQuesions.append(question.text)
         # print(question.text)
 
-
-    #change relative link to direct link
-    relative_links = soup.select('a[href^="/"]')
-    for link in relative_links:
-        href = link['href']
-        direct_link = urljoin(BASE_URL, href)
-        link['href'] = direct_link
-
     answers = soup.select("[class=panelContent]")
     for answer in answers:
+
+        if answer.find('a') != None:
+            urls = answer.find_all('a')
+            for url in urls:
+                if urlsplit(url["href"]).netloc == "":  # relative path
+                    url["href"] = urljoin(BASE_URL,  url["href"])
+                    pass
         if answer.find('img') != None:
             urls = answer.find_all('img')
             for url in urls:
@@ -64,10 +63,13 @@ def extract(url, headers, output_file_path, question_tag):
 
         cleanAnswers.append(answer.encode_contents().strip().decode('utf-8'))
         #cleanAnswers.append(answer.text.strip())
+    if len(cleanQuesions) !=len(cleanAnswers):
+        print("Warning: question count doesn't match answer count for the page " + urlPath)
+        print("Question count: " + str(len(cleanQuesions)) + "Answer count: " + str(len(cleanAnswers)))
     sz = min(len(cleanQuesions), len(cleanAnswers))
 
     df = pd.DataFrame({'Question': cleanQuesions[:sz], 'Answer': cleanAnswers[:sz],'Class': question_tag })
-    print(df)
+    #print(df)
     df.to_csv(output_file_path, sep='|',quotechar='\'', index=False)
 
 def update():
