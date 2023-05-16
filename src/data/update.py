@@ -6,6 +6,7 @@ import re
 import pandas as pd
 from urllib.parse import urlsplit
 from urllib.parse import urljoin
+import extract
 
 BASE_DIR = os.path.join(os.path.dirname(__file__), '../database/')
 BASE_URL = 'https://confluence.amlogic.com'
@@ -33,45 +34,6 @@ def get_pages():
 
     return pages
 
-
-def extract(url, headers, output_file_path, question_tag):
-    response = requests.get(url, headers=headers)
-
-    soup = BeautifulSoup(response.text, 'html.parser')
-
-    questions = soup.find_all('h2', {'id': lambda x: x and question_tag in x})
-    cleanQuesions = []
-    cleanAnswers = []
-    for question in questions:
-        cleanQuesions.append(question.text)
-        # print(question.text)
-
-    answers = soup.select("[class=panelContent]")
-    for answer in answers:
-
-        if answer.find('a') != None:
-            urls = answer.find_all('a')
-            for url in urls:
-                if urlsplit(url["href"]).netloc == "":  # relative path
-                    url["href"] = urljoin(BASE_URL,  url["href"])
-                    pass
-        if answer.find('img') != None:
-            urls = answer.find_all('img')
-            for url in urls:
-                if urlsplit(url["src"]).netloc == "":  # relative path
-                    url["src"] = urljoin(BASE_URL,  url["src"])
-
-        cleanAnswers.append(answer.encode_contents().strip().decode('utf-8'))
-        #cleanAnswers.append(answer.text.strip())
-    if len(cleanQuesions) !=len(cleanAnswers):
-        print("Warning: question count doesn't match answer count for the page " + urlPath)
-        print("Question count: " + str(len(cleanQuesions)) + "Answer count: " + str(len(cleanAnswers)))
-    sz = min(len(cleanQuesions), len(cleanAnswers))
-
-    df = pd.DataFrame({'Question': cleanQuesions[:sz], 'Answer': cleanAnswers[:sz],'Class': question_tag })
-    #print(df)
-    df.to_csv(output_file_path, sep='|',quotechar='\'', index=False)
-
 def update():
     print('=== Updating START ===')
     pages = get_pages()
@@ -84,7 +46,7 @@ def update():
         print(file_name)
         print(file_path)
         print(url)
-        extract(url, HEADERS, file_path, question_tag)
+        extract.extract(url, HEADERS, file_path, question_tag)
 
     print('=== Updated ' + str(len(pages)) + ' FAQs ===')
     print('=== Updating DONE ===')
