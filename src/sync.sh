@@ -1,1 +1,1 @@
-cp ~/code/dev/FAQChatbot/*  ~/code/prod/FAQChatbot/  -r
+cp ~/dev/FAQChatbot  ~/prod/  -d -r
