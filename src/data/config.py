@@ -12,6 +12,7 @@ def getQuestionTag(url):
     return p.replace("+", "")
 
 urls = [
+    "https://confluence.amlogic.com/display/SW/Irdeto+CAS+FAQ",
     "https://confluence.amlogic.com/display/SW/Chatbot+FAQ",
     "https://confluence.amlogic.com/display/SW/Security+FAQ",
     "https://confluence.amlogic.com/display/SW/TEE+FAQ",

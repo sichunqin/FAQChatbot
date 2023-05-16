@@ -7,7 +7,10 @@ import pandas as pd
 from urllib.parse import urlsplit
 from urllib.parse import urljoin
 
-BASE_DIR = os.path.dirname(__file__)
+ROOT_URL = "https://confluence.amlogic.com"
+
+BASE_DIR = os.path.join(os.path.dirname(__file__), '../database/')
+
 HEADERS = {
     'Authorization': 'Bearer ' + secret.token,
     'Content-Type': 'application/json'
@@ -29,10 +32,18 @@ def extract(url, headers, output_file_path, question_tag):
     answers = soup.select("[class=panelContent]")
     for answer in answers:
         if answer.find('a') != None:
-            url = answer.find('a')["href"]
-            if urlsplit(url).netloc == "":  # relative path
-                answer.find('a')["href"] = urljoin("https://confluence.amlogic.com",  answer.find('a')["href"])
-                pass
+            urls = answer.find_all('a')
+            for url in urls:
+                if urlsplit(url["href"]).netloc == "":  # relative path
+                    url["href"] = urljoin(ROOT_URL,  url["href"])
+                    pass
+
+        if answer.find('img') != None:
+            urls = answer.find_all('img')
+            for url in urls:
+                if urlsplit(url["src"]).netloc == "":  # relative path
+                    url["src"] = urljoin(ROOT_URL,  url["src"])
+                    pass
         cleanAnswers.append(answer.encode_contents().strip().decode('utf-8'))
         #cleanAnswers.append(answer.text.strip())
     sz = min(len(cleanQuesions), len(cleanAnswers))
@@ -50,7 +61,7 @@ def extractAll():
         question_tag = config.getQuestionTag(url)
         extract(url,HEADERS,file_path,question_tag)
 def extractOne():
-    url = config.urls[4]
+    url = config.urls[0]
     file_name = config.getCSVFileName(url)
     file_path = os.path.join(BASE_DIR, file_name)
     question_tag = config.getQuestionTag(url)
@@ -58,8 +69,8 @@ def extractOne():
     extract(url,HEADERS,file_path,question_tag)
     pass
 if __name__ == "__main__":
-    extractAll()
-    #extractOne()
+    #extractAll()
+    extractOne()
     pass
 
 
