@@ -51,7 +51,7 @@ def extract(urlPath, headers, output_file_path, question_tag):
         print("Question count: " + str(len(cleanQuesions)) + "Answer count: " + str(len(cleanAnswers)))
     sz = min(len(cleanQuesions), len(cleanAnswers))
 
-    df = pd.DataFrame({'Question': cleanQuesions[:sz], ' Answer': cleanAnswers[:sz],'Class': question_tag })
+    df = pd.DataFrame({'Question': cleanQuesions[:sz], 'Answer': cleanAnswers[:sz],'Class': question_tag })
     #print(df)
     # output_file_path = os.path.join("src/data", output_file_name)
 
