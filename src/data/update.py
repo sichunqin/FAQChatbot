@@ -37,6 +37,7 @@ def get_pages():
 def update():
     print('=== Updating START ===')
     pages = get_pages()
+    title_list = []
     print('GET ' + str(len(pages)) + ' FAQs with TAG "security-chatbot"!')
     for page_id, page_title in pages:
         file_name = page_title.replace(" ", '') + ".csv"
@@ -46,9 +47,12 @@ def update():
         print(file_name)
         print(file_path)
         print(url)
-
+        title_list.append(page_title)
         extract.extract(url, HEADERS, file_path, question_tag, page_title)
 
+    catagory_file_path = os.path.join(BASE_DIR, "category.csv")
+
+    extract.generateFAQCategory(title_list,catagory_file_path)
     print('=== Updated ' + str(len(pages)) + ' FAQs ===')
     print('=== Updating DONE ===')
 
