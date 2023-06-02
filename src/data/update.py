@@ -46,7 +46,8 @@ def update():
         print(file_name)
         print(file_path)
         print(url)
-        extract.extract(url, HEADERS, file_path, question_tag)
+
+        extract.extract(url, HEADERS, file_path, question_tag, page_title)
 
     print('=== Updated ' + str(len(pages)) + ' FAQs ===')
     print('=== Updating DONE ===')

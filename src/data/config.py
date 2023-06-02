@@ -10,7 +10,9 @@ def getCSVFileName(url):
 def getQuestionTag(url):
     p = os.path.basename(urlparse(url).path)
     return p.replace("+", "")
-
+def getPageTitle(url):
+    p = os.path.basename(urlparse(url).path)
+    return p.replace("+", " ")
 urls = [
     "https://confluence.amlogic.com/display/SW/Irdeto+CAS+FAQ",
     "https://confluence.amlogic.com/display/SW/Chatbot+FAQ",
