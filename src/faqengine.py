@@ -91,11 +91,8 @@ class FaqEngine:
             return "Could not follow your question [" + usr + "], Try again"
 
 
-if __name__ == "__main__":
-    base_path = os.path.join(os.path.dirname(os.path.abspath( __file__ )),"data")
-    faqslist = [os.path.join(base_path,"greetings.csv"), os.path.join(base_path,"vcas.csv")]
-
-    faqmodel = FaqEngine(faqslist, 'tfidf')
+def WorkinQaMode(faqs_list):
+    faqmodel = FaqEngine(faqs_list, 'tfidf')
     response = faqmodel.query("Hi")
     print(response)
 
@@ -103,4 +100,28 @@ if __name__ == "__main__":
        question = input("Enter Question: ")
        response = faqmodel.query(question)
        print(response)
+    pass
+def testOneCsvData():
+    base_path = os.path.join(os.path.dirname(os.path.abspath( __file__ )),"database")
+    faqs_list = [os.path.join(base_path,"ChatbotFAQ.csv")]
+    WorkinQaMode(faqs_list)
+
+def testAllCsvData():
+    BASE_DIR = os.path.dirname(__file__)
+    FAQs_DATA_FOLDER = os.path.join(BASE_DIR, "data")
+    DATABASE_FOLDER = os.path.join(BASE_DIR, "database")
+    faqs_list = [os.path.join(FAQs_DATA_FOLDER, "greetings.csv")]
+
+    for root, directories, filenames in os.walk(DATABASE_FOLDER):
+        for filename in filenames:
+            file_path = os.path.join(root, filename)
+            if file_path.endswith('.csv'):
+                faqs_list.append(file_path)
+    WorkinQaMode(faqs_list)
+    pass
+
+if __name__ == "__main__":
+    testAllCsvData()
+    pass
+
 

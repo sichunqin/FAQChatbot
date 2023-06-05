@@ -16,7 +16,16 @@ HEADERS = {
     'Content-Type': 'application/json'
 }
 
-def extract(urlPath, headers, output_file_path, question_tag):
+def generateFAQCategory(title_list,out_file_path):
+
+    title_list_row =  {'Question': ["FAQ Category"], 'Answer': ['\n'.join(title_list)],'Class':["FAQCategory"]}
+    df = pd.DataFrame(title_list_row)
+
+    df.to_csv(out_file_path, sep='|',quotechar='\'',index=False)
+    print("Generate FAQ Category at : " + out_file_path)
+    pass
+
+def extract(urlPath, headers, output_file_path, question_tag,page_title):
     response = requests.get(urlPath, headers=headers)
 
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -52,6 +61,11 @@ def extract(urlPath, headers, output_file_path, question_tag):
     sz = min(len(cleanQuesions), len(cleanAnswers))
 
     df = pd.DataFrame({'Question': cleanQuesions[:sz], 'Answer': cleanAnswers[:sz],'Class': question_tag })
+
+    # Add question list to the data
+    question_list_row =  {'Question': page_title, 'Answer': '\n'.join(cleanQuesions),'Class':question_tag}
+    df = df._append(question_list_row,ignore_index=True)
+
     #print(df)
     # output_file_path = os.path.join("src/data", output_file_name)
 
@@ -63,18 +77,29 @@ def extractAll():
         file_name = config.getCSVFileName(url)
         file_path = os.path.join(BASE_DIR, file_name)
         question_tag = config.getQuestionTag(url)
-        extract(url,HEADERS,file_path,question_tag)
+        page_title = config.getPageTitle(url)
+        extract(url,HEADERS,file_path,question_tag,page_title)
+
 def extractOne():
     url = config.urls[0]
     file_name = config.getCSVFileName(url)
     file_path = os.path.join(BASE_DIR, file_name)
     question_tag = config.getQuestionTag(url)
-
+    page_title = config.getPageTitle(url)
     extract(url,HEADERS,file_path,question_tag)
     pass
+
+def testGenerateCategory():
+    file_path = os.path.join(BASE_DIR, "category.csv")
+    title_list = ["a","b"]
+
+    generateFAQCategory(title_list,file_path)
+    pass
+
 if __name__ == "__main__":
-    extractAll()
+    #extractAll()
     #extractOne()
+    testGenerateCategory()
     pass
 
 
