@@ -14,3 +14,11 @@
 #msg_input{
     color: black;
 }
+
+table{
+    border: 2px solid black;
+}
+th, td{
+    border: 1px solid black;
+
+}
