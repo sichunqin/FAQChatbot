@@ -30,7 +30,9 @@ def get_pages():
     for result in data['results']:
         page_id = result['id']
         page_title = result['title']
-        pages.append((page_id, page_title))
+        webui = result['_links']['webui']
+        page_url = BASE_URL + webui
+        pages.append((page_id, page_title,page_url))
 
     return pages
 
@@ -39,16 +41,17 @@ def update():
     pages = get_pages()
     title_list = []
     print('GET ' + str(len(pages)) + ' FAQs with TAG "security-chatbot"!')
-    for page_id, page_title in pages:
+    for page_id, page_title,page_url in pages:
+
         file_name = page_title.replace(" ", '') + ".csv"
         file_path = os.path.join(BASE_DIR, file_name)
-        question_tag = page_title.replace(' ', '')
-        url = BASE_URL + '/display/SW/' + page_title.replace(' ', '+')
+        question_tag = page_title.replace(' ', '').replace("#", '')
+
         print(file_name)
         print(file_path)
-        print(url)
+        print(page_url)
         title_list.append(page_title)
-        extract.extract(url, HEADERS, file_path, question_tag, page_title)
+        extract.extract(page_url, HEADERS, file_path, question_tag, page_title)
 
     catagory_file_path = os.path.join(BASE_DIR, "category.csv")
 

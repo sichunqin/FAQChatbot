@@ -1,7 +1,9 @@
 
 import os
 from urllib.parse import urlparse
-
+from bs4 import BeautifulSoup
+import requests
+import secret
 
 def getCSVFileName(url):
     p = os.path.basename(urlparse(url).path)
@@ -11,9 +13,30 @@ def getQuestionTag(url):
     p = os.path.basename(urlparse(url).path)
     return p.replace("+", "")
 def getPageTitle(url):
-    p = os.path.basename(urlparse(url).path)
-    return p.replace("+", " ")
+    if "display" in url:
+        p = os.path.basename(urlparse(url).path)
+        return p.replace("+", " ")
+    else:
+        p = getH1PageTitle(url,)
+        return p
+
+def getH1PageTitle(urlPath):
+
+    HEADERS = {
+    'Authorization': 'Bearer ' + secret.token,
+    'Content-Type': 'application/json'
+    }
+    response = requests.get(urlPath, headers=HEADERS)
+
+    soup = BeautifulSoup(response.text, 'html.parser')
+    h1 = soup.find('h1', {'id': 'title-text'})
+    return h1.text.strip()
+
+def getCleanPageTitle(pageTitle):
+    return pageTitle.replace(" ","").replace("#", "")
+    pass
 urls = [
+    "https://confluence.amlogic.com/pages/viewpage.action?pageId=262496189",
     "https://confluence.amlogic.com/display/SW/Irdeto+SDK+Integration+User+Guide",
     "https://confluence.amlogic.com/display/SW/Irdeto+CAS+FAQ",
     "https://confluence.amlogic.com/display/SW/Chatbot+FAQ",

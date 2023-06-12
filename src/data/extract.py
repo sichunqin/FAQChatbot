@@ -76,18 +76,21 @@ def extract(urlPath, headers, output_file_path, question_tag,page_title):
 
 def extractAll():
     for url in config.urls:
-        file_name = config.getCSVFileName(url)
+        page_title = config.getH1PageTitle(url)
+        question_tag = config.getCleanPageTitle(page_title)
+        file_name = question_tag + ".csv"
         file_path = os.path.join(BASE_DIR, file_name)
-        question_tag = config.getQuestionTag(url)
-        page_title = config.getPageTitle(url)
         extract(url,HEADERS,file_path,question_tag,page_title)
 
 def extractOne():
+
     url = config.urls[0]
-    file_name = config.getCSVFileName(url)
+
+    page_title = config.getH1PageTitle(url)
+    question_tag = config.getCleanPageTitle(page_title)
+    file_name = question_tag + ".csv"
     file_path = os.path.join(BASE_DIR, file_name)
-    question_tag = config.getQuestionTag(url)
-    page_title = config.getPageTitle(url)
+
     extract(url,HEADERS,file_path,question_tag,page_title)
     pass
 
@@ -99,8 +102,8 @@ def testGenerateCategory():
     pass
 
 if __name__ == "__main__":
-    #extractAll()
-    extractOne()
+    extractAll()
+    #extractOne()
     #testGenerateCategory()
     pass
 
