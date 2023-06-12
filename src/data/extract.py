@@ -43,6 +43,8 @@ def extract(urlPath, headers, output_file_path, question_tag,page_title):
         if answer.find('a') != None:
             urls = answer.find_all('a')
             for url in urls:
+                if url.get("href") is None:  # not href in the url, then ignore it.
+                    continue
                 if urlsplit(url["href"]).netloc == "":  # relative path
                     url["href"] = urljoin(ROOT_URL,  url["href"])
                     pass
@@ -86,7 +88,7 @@ def extractOne():
     file_path = os.path.join(BASE_DIR, file_name)
     question_tag = config.getQuestionTag(url)
     page_title = config.getPageTitle(url)
-    extract(url,HEADERS,file_path,question_tag)
+    extract(url,HEADERS,file_path,question_tag,page_title)
     pass
 
 def testGenerateCategory():
@@ -98,8 +100,8 @@ def testGenerateCategory():
 
 if __name__ == "__main__":
     #extractAll()
-    #extractOne()
-    testGenerateCategory()
+    extractOne()
+    #testGenerateCategory()
     pass
 
 

@@ -14,6 +14,7 @@ def getPageTitle(url):
     p = os.path.basename(urlparse(url).path)
     return p.replace("+", " ")
 urls = [
+    "https://confluence.amlogic.com/display/SW/Irdeto+SDK+Integration+User+Guide",
     "https://confluence.amlogic.com/display/SW/Irdeto+CAS+FAQ",
     "https://confluence.amlogic.com/display/SW/Chatbot+FAQ",
     "https://confluence.amlogic.com/display/SW/Security+FAQ",
