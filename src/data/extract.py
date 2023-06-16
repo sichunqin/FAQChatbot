@@ -18,7 +18,10 @@ HEADERS = {
 
 def generateFAQCategory(title_list,out_file_path):
 
-    title_list_row =  {'Question': ["FAQ Category"], 'Answer': ['\n'.join(title_list)],'Class':["FAQCategory"]}
+    linked_title_list = []
+    for title in title_list:
+        linked_title_list.append(convertToLinkedText(title))
+    title_list_row =  {'Question': ["FAQ Category"], 'Answer': ['\n'.join(linked_title_list)],'Class':["FAQCategory"]}
     df = pd.DataFrame(title_list_row)
 
     df.to_csv(out_file_path, sep='|',quotechar='\'',index=False)
@@ -64,8 +67,13 @@ def extract(urlPath, headers, output_file_path, question_tag,page_title):
 
     df = pd.DataFrame({'Question': cleanQuesions[:sz], 'Answer': cleanAnswers[:sz],'Class': question_tag })
 
+    linkedCleanQuestions = []
+    for que in cleanQuesions:
+        linkedCleanQuestions.append(convertToLinkedText(que))
+        pass
     # Add question list to the data
-    question_list_row =  {'Question': page_title, 'Answer': '\n'.join(cleanQuesions),'Class':question_tag}
+    question_list_row =  {'Question': page_title, 'Answer': '\n'.join(linkedCleanQuestions),'Class':question_tag}
+
     df = df._append(question_list_row,ignore_index=True)
 
     #print(df)
@@ -73,6 +81,13 @@ def extract(urlPath, headers, output_file_path, question_tag,page_title):
 
     df.to_csv(output_file_path, sep='|',quotechar='\'',index=False)
     print("Crawl data from the page: " + urlPath)
+#
+# convert str to the following hyperlink
+#<a href="#" onclick="sendLinkText(this);">str</a>
+#
+def convertToLinkedText(str):
+    return r'<a href="#" onclick="sendLinkText(this);">' + str + "</a>"
+    pass
 
 def extractAll():
     for url in config.urls:

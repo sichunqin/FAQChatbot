@@ -86,3 +86,9 @@ $('.message_input').keyup(function (e) {
     $('.message_input').val('') ;}
     }
 });
+
+function sendLinkText(link) {
+    var msg = link.innerHTML; // Get linked text
+    showUserMessage(msg);
+    sayToBot(msg);
+  }
