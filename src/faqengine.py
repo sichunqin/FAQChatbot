@@ -92,8 +92,6 @@ class FaqEngine:
 
                 finalAnswer = self.data['Answer'][questionset.index[ind]] + r"<hr>" + topQuestionsHeader + "<ul>" + topQuestions + "</ul>"
 
-                print("Matched Top questions: ")
-                print(possibleQuestionList)
                 return finalAnswer
         except Exception as e:
             print(e)
@@ -105,8 +103,8 @@ class FaqEngine:
         for top in tops:
             i = cos_sims.index(top)
             if i > 0:  # Found
-
                 top_question_list.append(self.data['Question'][i])
+                print(self.data['Question'][i] + "  " + str(i) + " " + self.data['Class'][i])
             pass
 
         return top_question_list

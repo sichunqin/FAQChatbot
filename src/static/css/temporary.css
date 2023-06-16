@@ -22,3 +22,7 @@ th, td{
     border: 1px solid black;
 
 }
+
+hr {
+    border: 1px solid blue;
+}
