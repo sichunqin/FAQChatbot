@@ -6,6 +6,7 @@ import os
 import pandas as pd
 from urllib.parse import urlsplit
 from urllib.parse import urljoin
+import common
 
 ROOT_URL = "https://confluence.amlogic.com"
 
@@ -20,7 +21,7 @@ def generateFAQCategory(title_list,out_file_path):
 
     linked_title_list = []
     for title in title_list:
-        linked_title_list.append(convertToLinkedText(title))
+        linked_title_list.append(common.convertToLinkedText(title))
     title_list_row =  {'Question': ["FAQ Category"], 'Answer': ['\n'.join(linked_title_list)],'Class':["FAQCategory"]}
     df = pd.DataFrame(title_list_row)
 
@@ -69,7 +70,7 @@ def extract(urlPath, headers, output_file_path, question_tag,page_title):
 
     linkedCleanQuestions = []
     for que in cleanQuesions:
-        linkedCleanQuestions.append(convertToLinkedText(que))
+        linkedCleanQuestions.append(common.convertToLinkedText(que))
         pass
     # Add question list to the data
     question_list_row =  {'Question': page_title, 'Answer': '\n'.join(linkedCleanQuestions),'Class':question_tag}
@@ -81,13 +82,6 @@ def extract(urlPath, headers, output_file_path, question_tag,page_title):
 
     df.to_csv(output_file_path, sep='|',quotechar='\'',index=False)
     print("Crawl data from the page: " + urlPath)
-#
-# convert str to the following hyperlink
-#<a href="#" onclick="sendLinkText(this);">str</a>
-#
-def convertToLinkedText(str):
-    return r'<a href="#" onclick="sendLinkText(this);">' + str + "</a>"
-    pass
 
 def extractAll():
     for url in config.urls:

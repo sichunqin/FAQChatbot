@@ -8,6 +8,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.model_selection import train_test_split as tts
 from sklearn.preprocessing import LabelEncoder as LE
 from sklearn.svm import SVC
+from data.common import convertToLinkedText
 
 from vectorizers.factory import get_vectoriser
 
@@ -58,7 +59,7 @@ class FaqEngine:
         # print("SVC:", self.model.score(testx, testy))
 
     def query(self, usr):
-        # print("User typed : " + usr)
+        print("User typed : " + usr)
         try:
             cleaned_usr = self.cleanup(usr)
             t_usr_array = self.vectorizer.query(cleaned_usr)
@@ -83,13 +84,32 @@ class FaqEngine:
             # print("scores " + str(cos_sims))
             if len(cos_sims) > 0:
                 ind = cos_sims.index(max(cos_sims))
-                # print(ind)
-                # print(questionset.index[ind])
-                return self.data['Answer'][questionset.index[ind]]
+                possibleQuestionList = self.getTopMatchedQuestions(cos_sims)
+                topQuestionsHeader = "Possible Matched Questions:" + r"<br>"
+                topQuestions = ""
+                for question in possibleQuestionList:
+                    topQuestions = topQuestions + "<li>" + convertToLinkedText(question) + r"</li>"
+
+                finalAnswer = self.data['Answer'][questionset.index[ind]] + r"<hr>" + topQuestionsHeader + "<ul>" + topQuestions + "</ul>"
+
+                print("Matched Top questions: ")
+                print(possibleQuestionList)
+                return finalAnswer
         except Exception as e:
             print(e)
             return "Could not follow your question [" + usr + "], Try again"
 
+    def getTopMatchedQuestions(self,cos_sims):
+        top_question_list = []
+        tops = sorted(cos_sims, reverse=True)[:3]
+        for top in tops:
+            i = cos_sims.index(top)
+            if i > 0:  # Found
+
+                top_question_list.append(self.data['Question'][i])
+            pass
+
+        return top_question_list
 
 def WorkinQaMode(faqs_list):
     faqmodel = FaqEngine(faqs_list, 'tfidf')
