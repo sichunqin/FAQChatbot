@@ -85,7 +85,7 @@ class FaqEngine:
             if len(cos_sims) > 0:
                 ind = cos_sims.index(max(cos_sims))
                 possibleQuestionList = self.getTopMatchedQuestions(cos_sims)
-                topQuestionsHeader = "Possible Matched Questions:" + r"<br>"
+                topQuestionsHeader = "Related Questions:" + r"<br>"
                 topQuestions = ""
                 for question in possibleQuestionList:
                     topQuestions = topQuestions + "<li>" + convertToLinkedText(question) + r"</li>"
