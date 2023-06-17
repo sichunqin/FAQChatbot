@@ -89,8 +89,10 @@ class FaqEngine:
                 topQuestions = ""
                 for question in possibleQuestionList:
                     topQuestions = topQuestions + "<li>" + convertToLinkedText(question) + r"</li>"
-
-                finalAnswer = self.data['Answer'][questionset.index[ind]] + r"<hr>" + topQuestionsHeader + "<ul>" + topQuestions + "</ul>"
+                if len(possibleQuestionList) > 1:
+                    finalAnswer = self.data['Answer'][questionset.index[ind]] + r"<hr>" + topQuestionsHeader + "<ul>" + topQuestions + "</ul>"
+                else:
+                    finalAnswer = self.data['Answer'][questionset.index[ind]]
 
                 return finalAnswer
         except Exception as e:
