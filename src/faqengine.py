@@ -100,12 +100,12 @@ class FaqEngine:
             return "Could not follow your question [" + usr + "], Try again"
 
     def getTopMatchedQuestions(self,cos_sims):
-        top_question_list = []
+        top_question_list = set() #[]
         tops = sorted(cos_sims, reverse=True)[:3]
         for top in tops:
             i = cos_sims.index(top)
             if i > 0:  # Found
-                top_question_list.append(self.data['Question'][i])
+                top_question_list.add(self.data['Question'][i])
                 print(self.data['Question'][i] + "  " + str(i) + " " + self.data['Class'][i])
             pass
 
