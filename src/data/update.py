@@ -15,9 +15,9 @@ HEADERS = {
     'Content-Type': 'application/json'
 }
 
-def get_pages():
+def get_pages(tag="security-chatbot"):
     # Define the tag to search for
-    tag = 'security-chatbot'
+    #tag = 'security-chatbot'
 
     # Search for pages with the tag
     url = f'{BASE_URL}/rest/api/content/search?cql=label="{tag}"&limit=100'
@@ -36,9 +36,20 @@ def get_pages():
 
     return pages
 
+def get_no_toc_title_list():
+    title_list = []
+    pages = get_pages("security-chatbot-no-toc")
+    for page_id, page_title,page_url in pages:
+        title_list.append(page_title)
+
+    return title_list
+
 def update():
+
     print('=== Updating START ===')
     pages = get_pages()
+
+    no_toc_list = get_no_toc_title_list()
     title_list = []
     print('GET ' + str(len(pages)) + ' FAQs with TAG "security-chatbot"!')
     for page_id, page_title,page_url in pages:
@@ -50,8 +61,9 @@ def update():
         print(file_name)
         print(file_path)
         print(page_url)
-        title_list.append(page_title)
-        extract.extract(page_url, HEADERS, file_path, question_tag, page_title)
+        if page_title not in no_toc_list:
+            title_list.append(page_title)
+            extract.extract(page_url, HEADERS, file_path, question_tag, page_title)
 
     catagory_file_path = os.path.join(BASE_DIR, "category.csv")
 
