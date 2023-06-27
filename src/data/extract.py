@@ -29,7 +29,7 @@ def generateFAQCategory(title_list,out_file_path):
     print("Generate FAQ Category at : " + out_file_path)
     pass
 
-def extract(urlPath, headers, output_file_path, question_tag,page_title):
+def extract(urlPath, headers, output_file_path, question_tag,page_title, need_toc = True):
     response = requests.get(urlPath, headers=headers)
 
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -73,12 +73,9 @@ def extract(urlPath, headers, output_file_path, question_tag,page_title):
         linkedCleanQuestions.append(common.convertToLinkedText(que))
         pass
     # Add question list to the data
-    question_list_row =  {'Question': page_title, 'Answer': '\n'.join(linkedCleanQuestions),'Class':question_tag}
-
-    df = df._append(question_list_row,ignore_index=True)
-
-    #print(df)
-    # output_file_path = os.path.join("src/data", output_file_name)
+    if need_toc:
+        question_list_row =  {'Question': page_title, 'Answer': '\n'.join(linkedCleanQuestions),'Class':question_tag}
+        df = df._append(question_list_row,ignore_index=True)
 
     df.to_csv(output_file_path, sep='|',quotechar='\'',index=False)
     print("Crawl data from the page: " + urlPath)

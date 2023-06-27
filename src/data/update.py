@@ -61,9 +61,11 @@ def update():
         print(file_name)
         print(file_path)
         print(page_url)
-        if page_title not in no_toc_list:
+        need_toc = page_title not in no_toc_list
+        if need_toc:
             title_list.append(page_title)
-            extract.extract(page_url, HEADERS, file_path, question_tag, page_title)
+
+        extract.extract(page_url, HEADERS, file_path, question_tag, page_title,need_toc)
 
     catagory_file_path = os.path.join(BASE_DIR, "category.csv")
 
