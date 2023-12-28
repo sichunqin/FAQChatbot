@@ -44,9 +44,10 @@ def get_no_toc_title_list():
 
     return title_list
 
-def update():
+def cralwPagesWithPannels():
 
-    print('=== Updating START ===')
+    tag = "security-chatbot"
+    print(f'=== Start to update database from confluence pages tag with {tag} ===')
     pages = get_pages()
 
     no_toc_list = get_no_toc_title_list()
@@ -67,13 +68,47 @@ def update():
 
         extract.extract(page_url, HEADERS, file_path, question_tag, page_title,need_toc)
 
-    catagory_file_path = os.path.join(BASE_DIR, "category.csv")
-
-    extract.generateFAQCategory(title_list,catagory_file_path)
     print('=== Updated ' + str(len(pages)) + ' FAQs ===')
     print('=== Updating DONE ===')
+    return title_list
+
+
+def crawlPagesTagWithchatbot_h2():
+    tag = "security-chatbot-h2"
+    print(f'=== Start to update database from confluence pages tag with {tag} ===')
+
+    pages = get_pages(tag)
+
+    no_toc_list = get_no_toc_title_list()
+    title_list = []
+    print(f'Get  {len(pages)} FAQs with TAG {tag}')
+    for page_id, page_title,page_url in pages:
+
+        file_name = page_title.replace(" ", '') + ".csv"
+        file_path = os.path.join(BASE_DIR, file_name)
+        question_tag = page_title.replace(' ', '').replace("#", '')
+
+        print(file_name)
+        print(file_path)
+        print(page_url)
+        need_toc = page_title not in no_toc_list
+        if need_toc:
+            title_list.append(page_title)
+
+        extract.extractH2FromPage(page_url, HEADERS, file_path, question_tag, page_title,need_toc)
+
+    print('=== Updated ' + str(len(pages)) + ' FAQs ===')
+    print('=== Updating DONE ===')
+    return title_list
 
 
 if __name__ == "__main__":
-    update()
+    titles_1 = cralwPagesWithPannels()
+    titles_2 = crawlPagesTagWithchatbot_h2()
+    titles = titles_1 + titles_2
+    catagory_file_path = os.path.join(BASE_DIR, "category.csv")
+
+    extract.generateFAQCategory(titles,catagory_file_path)
+
+
     pass
