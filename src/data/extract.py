@@ -7,6 +7,7 @@ import pandas as pd
 from urllib.parse import urlsplit
 from urllib.parse import urljoin
 import common
+import copy
 
 ROOT_URL = "https://confluence.amlogic.com"
 
@@ -91,9 +92,19 @@ def extractH2FromPage(urlPath, headers, output_file_path, question_tag,page_titl
     cleanQuesions = []
     cleanAnswers = []
     answers = []
+    q = ""
+
     for question in questions:
         cleanQuesions.append(question.text)
-        answers.append(question.next_sibling)
+        answer_tag = soup.new_tag("div")
+        n = question.next_sibling
+        while (n != None):
+            if(n.name == "h2"):
+                break
+            answer_tag.append(copy.copy(n))
+            n = n.next_sibling
+
+        answers.append(answer_tag)
 
     for answer in answers:
         if answer.find('a') != None:

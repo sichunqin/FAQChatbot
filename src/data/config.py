@@ -36,6 +36,7 @@ def getCleanPageTitle(pageTitle):
     return pageTitle.replace(" ","").replace("#", "")
     pass
 urls = [
+    "https://confluence.amlogic.com/pages/viewpage.action?spaceKey=SW&title=2.+Secmem+Release+Version+information",
     "https://confluence.amlogic.com/display/~Sichun.Qin/Proposal+To+Burn+Keybox",
     "https://confluence.amlogic.com/pages/viewpage.action?pageId=262496189",
     "https://confluence.amlogic.com/display/SW/Irdeto+SDK+Integration+User+Guide",
