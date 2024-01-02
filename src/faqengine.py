@@ -60,6 +60,7 @@ class FaqEngine:
 
     def query(self, usr):
         print("User typed : " + usr)
+        exact_match_index = -1
         try:
             cleaned_usr = self.cleanup(usr)
             t_usr_array = self.vectorizer.query(cleaned_usr)
@@ -74,25 +75,36 @@ class FaqEngine:
             questionset = self.data
             # threshold = 0.7
             cos_sims = []
+            i = 0
             for question in questionset['Question']:
                 cleaned_question = self.cleanup(question)
                 question_arr = self.vectorizer.query(cleaned_question)
                 sims = cosine_similarity(question_arr, t_usr_array)
                 # if sims > threshold:
                 cos_sims.append(sims)
-
+                if(cleaned_question == cleaned_usr):
+                    exact_match_index = i
+                i = i + 1
             # print("scores " + str(cos_sims))
             if len(cos_sims) > 0:
                 ind = cos_sims.index(max(cos_sims))
                 possibleQuestionList = self.getTopMatchedQuestions(cos_sims)
+                if(exact_match_index >= 0 and questionset['Question'][exact_match_index] not in possibleQuestionList):
+                    possibleQuestionList.insert(0,questionset['Question'][exact_match_index])
+
                 topQuestionsHeader = "Related Questions:" + r"<br>"
                 topQuestions = ""
                 for question in possibleQuestionList:
                     topQuestions = topQuestions + "<li>" + convertToLinkedText(question) + r"</li>"
-                if len(possibleQuestionList) > 1:
-                    finalAnswer = self.data['Answer'][questionset.index[ind]] + r"<hr>" + topQuestionsHeader + "<ul>" + topQuestions + "</ul>"
-                else:
+                if(exact_match_index < 0):
                     finalAnswer = self.data['Answer'][questionset.index[ind]]
+                else:
+                    finalAnswer = self.data['Answer'][exact_match_index]
+
+                if len(possibleQuestionList) > 1:
+                    finalAnswer = finalAnswer + r"<hr>" + topQuestionsHeader + "<ul>" + topQuestions + "</ul>"
+                else:
+                    finalAnswer = finalAnswer
 
                 return finalAnswer
         except Exception as e:
