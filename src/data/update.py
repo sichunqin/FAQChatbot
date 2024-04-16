@@ -22,7 +22,7 @@ def get_pages(tag="security-chatbot"):
     # Search for pages with the tag
     url = f'{BASE_URL}/rest/api/content/search?cql=label="{tag}"&limit=100'
 
-    response = requests.get(url, headers=HEADERS)
+    response = requests.get(url, headers=HEADERS, verify=False)
     data = response.json()
 
     # Extract the page IDs and titles

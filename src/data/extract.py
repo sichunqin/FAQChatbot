@@ -33,7 +33,7 @@ def generateFAQCategory(title_list,out_file_path,is_new_file=True):
     pass
 
 def extract(urlPath, headers, output_file_path, question_tag,page_title, need_toc = True):
-    response = requests.get(urlPath, headers=headers)
+    response = requests.get(urlPath, headers=headers,verify=False)
 
     soup = BeautifulSoup(response.text, 'html.parser')
 
@@ -84,7 +84,7 @@ def extract(urlPath, headers, output_file_path, question_tag,page_title, need_to
     print("Crawl data from the page: " + urlPath)
 
 def extractH2FromPage(urlPath, headers, output_file_path, question_tag,page_title, need_toc = True):
-    response = requests.get(urlPath, headers=headers)
+    response = requests.get(urlPath, headers=headers, verify=False)
 
     soup = BeautifulSoup(response.text, 'html.parser')
 
